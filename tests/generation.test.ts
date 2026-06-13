@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { generateAssetsForProduct } from "@/lib/engine/assets";
+import { buildAssetSvg, generateAssetsForProduct } from "@/lib/engine/assets";
 import { generateContentForProduct } from "@/lib/engine/content";
 import { createInitialState } from "@/lib/state/demo-state";
 
@@ -25,5 +25,14 @@ describe("content and asset generation", () => {
       ["before_after", "comparison_graphic", "pinterest_card", "product_collage", "tiktok_storyboard"].sort(),
     );
     expect(assets[0].svg).toContain("<svg");
+  });
+
+  it("generates parseable storyboard SVG and escapes product text", () => {
+    const state = createInitialState();
+    const product = { ...state.products[0], title: "Rack & Rail <Plus>", niche: "kitchen & pantry" };
+    const svg = buildAssetSvg("tiktok_storyboard", product);
+
+    expect(svg).not.toContain("/></text>");
+    expect(svg).toContain("Rack &amp; Rail &lt;Plus&gt;");
   });
 });

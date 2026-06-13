@@ -13,7 +13,7 @@ export default async function SchedulerPage() {
   return (
     <AppShell state={state} title="Scheduler">
       <Panel>
-        <PanelHeader title="Content Queue" action={<ActionButton endpoint="/api/actions/publish-mock" variant="accent"><Send className="h-4 w-4" />Mock publish</ActionButton>} />
+        <PanelHeader title="Content Queue" action={<ActionButton endpoint="/api/actions/publish" variant="accent"><Send className="h-4 w-4" />Publish</ActionButton>} />
         <PanelBody className="overflow-x-auto">
           <table className="w-full min-w-[880px] text-left text-sm">
             <thead className="text-xs uppercase tracking-[0.08em] text-[#7c7467]">

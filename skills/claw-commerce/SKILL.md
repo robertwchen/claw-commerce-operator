@@ -1,6 +1,6 @@
 ---
 name: claw-commerce
-description: Operate the Claw Commerce affiliate workflow across product discovery, trend mining, content generation, mock publishing, analytics, and autopilot.
+description: Operate the Claw Commerce affiliate workflow across product discovery, trend mining, content generation, official API publishing, analytics, and autopilot.
 ---
 
 # Claw Commerce
@@ -38,13 +38,13 @@ Use this skill when the user asks OpenClaw to run, inspect, extend, or troublesh
 ## Publishing and Export Workflow
 
 1. Use real publishers only when credentials and platform review requirements are satisfied.
-2. Otherwise run `npm run publish:mock`.
+2. Otherwise run `npm run publish:real`.
 3. Export platform-ready post packages under `exports/`.
 4. Log publisher status, retries, and skipped credential reasons.
 
 ## Analytics Workflow
 
-1. Import real metrics through future adapters or run `npm run analytics:mock`.
+1. Import real metrics through configured adapters or run `npm run analytics:real`.
 2. Review impressions, saves, likes, clicks, conversions, revenue, top products, niches, hooks, and platforms.
 3. Mark strong products as winners and expand content variants.
 
@@ -55,7 +55,7 @@ Run one of:
 - `npm run autopilot:dry`
 - `npm run autopilot:full`
 
-The loop ingests trends, ingests products, scores opportunities, generates content, generates assets, creates landing pages, mock-publishes, imports analytics, and expands winners.
+The loop ingests trends, ingests products, scores opportunities, generates content, generates assets, creates landing pages, publishes through official APIs, imports analytics, and expands winners.
 
 ## Git Commit and Push Workflow
 
@@ -69,6 +69,6 @@ The loop ingests trends, ingests products, scores opportunities, generates conte
 
 - Missing database: continue with demo JSON state and document that Postgres is optional for demo mode.
 - Missing Redis: worker falls back to an inline dry-run job.
-- Missing AI keys: use deterministic mock generation.
-- Missing Pinterest/TikTok credentials: mock-publish and export packages.
+- Missing AI keys in real mode: skip generation and log the missing provider credential.
+- Missing Pinterest/TikTok credentials in real mode: skip that platform and export packages for owner review.
 - Failed build or tests: fix the smallest failing surface first, rerun verification, then commit.

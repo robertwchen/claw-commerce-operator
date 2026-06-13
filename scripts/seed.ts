@@ -2,11 +2,12 @@ import { PrismaClient } from "@prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { seedAngles, seedProducts, seedTrends } from "@/lib/data/seed";
 import { scoreProduct } from "@/lib/engine/scoring";
-import { createInitialState, writeState } from "@/lib/state/demo-state";
+import { isRealMode } from "@/lib/runtime";
+import { createInitialState, createRealInitialState, writeState } from "@/lib/state/demo-state";
 
 async function seedPrisma() {
   if (!process.env.DATABASE_URL) {
-    console.log("DATABASE_URL is not set; skipped Prisma/Postgres seed and wrote demo JSON state.");
+    console.log("DATABASE_URL is not set; skipped Prisma/Postgres seed and wrote JSON state.");
     return;
   }
 
@@ -67,9 +68,9 @@ async function seedPrisma() {
 }
 
 async function main() {
-  await writeState(createInitialState());
+  await writeState(isRealMode() ? createRealInitialState() : createInitialState());
   await seedPrisma();
-  console.log("Demo state seeded in storage/demo-state.json.");
+  console.log(`${isRealMode() ? "Real" : "Demo"} state seeded in storage/demo-state.json.`);
 }
 
 main().catch((error) => {

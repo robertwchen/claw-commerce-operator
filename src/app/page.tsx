@@ -21,7 +21,7 @@ export default async function Home() {
     ["Trends", state.trends.length, "active feeds"],
     ["Content", state.content.length, "generated posts"],
     ["Assets", state.assets.length, "visual packages"],
-    ["Published", state.content.filter((item) => item.status === "mock_published" || item.status === "published").length, "mock/live posts"],
+    ["Published", state.content.filter((item) => item.status === "mock_published" || item.status === "published").length, "published posts"],
   ];
 
   return (
@@ -30,7 +30,7 @@ export default async function Home() {
         <MetricCard icon={PackageSearch} label="Products found" value={String(state.products.length)} detail={`${topProducts[0]?.title ?? "No products"} leads`} tone="green" />
         <MetricCard icon={Radar} label="Trends found" value={String(state.trends.length)} detail={`${state.trends.filter((trend) => trend.status === "rising").length} rising signals`} tone="blue" />
         <MetricCard icon={MousePointerClick} label="Clicks" value={compactNumber(analytics.trackedClicks + analytics.clicks)} detail={`${(analytics.ctr * 100).toFixed(1)}% CTR estimate`} tone="amber" />
-        <MetricCard icon={BarChart3} label="Revenue estimate" value={currency(analytics.revenue)} detail={`${analytics.conversions} mock conversions`} tone="red" />
+        <MetricCard icon={BarChart3} label="Revenue estimate" value={currency(analytics.revenue)} detail={`${analytics.conversions} conversions`} tone="red" />
       </div>
 
       <div className="mt-6 grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
@@ -59,7 +59,7 @@ export default async function Home() {
                 <div key={log.id} className="flex items-center justify-between gap-4 rounded-lg border border-[#ebe6d8] px-4 py-3">
                   <div>
                     <p className="text-sm font-bold">{log.message}</p>
-                    <p className="text-xs font-semibold text-[#7c7467]">{log.scope} · {new Date(log.createdAt).toLocaleString()}</p>
+                    <p className="text-xs font-semibold text-[#7c7467]">{log.scope} - {new Date(log.createdAt).toLocaleString()}</p>
                   </div>
                   <Badge tone={log.level === "error" ? "red" : log.level === "warn" ? "amber" : "green"}>{log.level}</Badge>
                 </div>

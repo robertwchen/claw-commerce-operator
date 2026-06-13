@@ -6,8 +6,8 @@
 2. Scan and score products with `npm run scan:products`.
 3. Generate content for the strongest opportunities with `npm run generate:content`.
 4. Generate assets with `npm run generate:assets`.
-5. Mock-publish queued content with `npm run publish:mock`.
-6. Import metrics with `npm run analytics:mock`.
+5. Publish queued content with `npm run publish:real`.
+6. Import metrics with `npm run analytics:real`.
 7. Review `/analytics`, `/products`, `/content`, and `/logs`.
 
 ## Weekly Workflow
@@ -38,7 +38,7 @@
 1. Mark products with strong opportunity and metrics as `winner`.
 2. Generate more angles and assets.
 3. Build comparison and guide pages.
-4. Schedule/mock-publish variants across Pinterest and TikTok.
+4. Schedule/publish variants across Pinterest and TikTok through configured official APIs.
 5. Keep the original content pattern, but change the hook, proof sequence, and visual composition.
 
 ## Manual Override Workflow
@@ -46,4 +46,4 @@
 - Use dashboard pages for inspection and action buttons for controlled runs.
 - Pause products by changing their status in the state or database.
 - Disable real publisher adapters in settings/env if platform review or credentials are not ready.
-- Keep mock/export mode active until owned-account credentials are verified.
+- In real mode, skip and log any platform whose owned-account credentials are not verified.

@@ -3,6 +3,7 @@ export type ContentPlatform = "pinterest" | "tiktok" | "web";
 export type ContentStatus = "draft" | "queued" | "scheduled" | "published" | "mock_published";
 export type ProductStatus = "new" | "scored" | "active" | "winner" | "paused";
 export type AutopilotMode = "dry_run" | "manual_review" | "full_autopilot";
+export type ProductSource = "Amazon Creators API" | "Amazon PA-API" | "owned catalog import" | "manual import" | "mock Amazon" | "mock Walmart" | "mock Target" | "mock direct brand" | string;
 
 export type Product = {
   id: string;
@@ -17,7 +18,7 @@ export type Product = {
   imageUrl: string;
   rating: number;
   reviewCount: number;
-  source: "mock Amazon" | "mock Walmart" | "mock Target" | "mock direct brand" | "manual import";
+  source: ProductSource;
   niche: string;
   trendScore: number;
   visualScore: number;
@@ -143,7 +144,7 @@ export type PublishLog = {
   id: string;
   contentId?: string;
   platform: ContentPlatform;
-  status: "mock_published" | "exported" | "failed" | "skipped";
+  status: "published" | "mock_published" | "exported" | "failed" | "skipped";
   message: string;
   payload: Record<string, unknown>;
   attemptCount: number;

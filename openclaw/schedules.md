@@ -23,20 +23,20 @@ Use OpenClaw scheduled tasks or standing orders to run these commands.
 ## Daily Publish Queue
 
 - Time: 09:00 local
-- Command: `npm run publish:mock`
-- Expected output: mock-published posts and export packages
+- Command: `npm run publish:real`
+- Expected output: published posts through configured official APIs and export packages
 
 ## Weekly Analytics Review
 
 - Time: Monday 10:00 local
-- Command: `npm run analytics:mock`
-- Expected output: mock performance imports and refreshed dashboard metrics
+- Command: `npm run analytics:real`
+- Expected output: real performance imports and refreshed dashboard metrics
 
 ## Weekly Winner Expansion
 
 - Time: Monday 10:30 local
 - Command: `npm run autopilot:full`
-- Expected output: winner variants, assets, mock publishes, and analytics
+- Expected output: winner variants, assets, official API publish attempts, and analytics
 
 ## Weekly Repo Health Check
 

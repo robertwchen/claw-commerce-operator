@@ -16,7 +16,7 @@ export default async function AnalyticsPage() {
   return (
     <AppShell state={state} title="Analytics">
       <Panel>
-        <PanelHeader title="Performance" action={<ActionButton endpoint="/api/actions/analytics-mock" variant="accent"><BarChart3 className="h-4 w-4" />Import metrics</ActionButton>} />
+        <PanelHeader title="Performance" action={<ActionButton endpoint="/api/actions/analytics-import" variant="accent"><BarChart3 className="h-4 w-4" />Import metrics</ActionButton>} />
         <PanelBody>
           <div className="grid gap-4 md:grid-cols-4">
             <div className="rounded-lg bg-[#fdfbf6] p-4"><p className="text-xs font-bold uppercase text-[#7c7467]">Impressions</p><p className="mt-2 text-3xl font-black">{compactNumber(analytics.impressions)}</p></div>

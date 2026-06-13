@@ -12,6 +12,23 @@ export function slugify(value: string) {
     .replace(/^-+|-+$/g, "");
 }
 
+export function escapeXml(value: string) {
+  return value.replace(/[<>&'"]/g, (char) => ({ "<": "&lt;", ">": "&gt;", "&": "&amp;", "'": "&apos;", '"': "&quot;" })[char] ?? char);
+}
+
+export function truncate(value: string, maxLength: number) {
+  return value.length > maxLength ? value.slice(0, Math.max(0, maxLength - 1)).trimEnd() : value;
+}
+
+export function appBaseUrl() {
+  return (process.env.NEXT_PUBLIC_APP_URL ?? process.env.APP_URL ?? "http://localhost:3000").replace(/\/+$/, "");
+}
+
+export function absoluteAppUrl(pathOrUrl: string) {
+  if (/^https?:\/\//i.test(pathOrUrl)) return pathOrUrl;
+  return `${appBaseUrl()}${pathOrUrl.startsWith("/") ? "" : "/"}${pathOrUrl}`;
+}
+
 export function currency(value: number) {
   return new Intl.NumberFormat("en-US", {
     style: "currency",

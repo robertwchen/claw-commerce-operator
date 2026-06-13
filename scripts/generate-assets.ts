@@ -1,11 +1,11 @@
-import { generateAssetBatch } from "@/lib/engine/assets";
+import { generateAssetBatchRealAware } from "@/lib/engine/assets";
 import { addLog, mutateState } from "@/lib/state/demo-state";
 
 async function main() {
-  const state = await mutateState((draft) => {
-    const generated = generateAssetBatch(draft, 6);
+  const state = await mutateState(async (draft) => {
+    const generated = await generateAssetBatchRealAware(draft, 6);
     draft.assets.unshift(...generated);
-    addLog(draft, "info", "assets", "Generated simple visual assets for top products.", { generated: generated.length });
+    addLog(draft, "info", "assets", "Generated visual assets for top products.", { generated: generated.length });
     return draft;
   });
 

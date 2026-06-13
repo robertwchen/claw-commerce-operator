@@ -1,9 +1,11 @@
 import type { AutopilotMode, AutopilotRun, CommerceState } from "@/lib/domain";
 import { createMockMetrics } from "@/lib/engine/analytics";
-import { generateAssetBatch } from "@/lib/engine/assets";
+import { generateAssetBatchRealAware } from "@/lib/engine/assets";
 import { generateContentBatch } from "@/lib/engine/content";
 import { scoreProduct } from "@/lib/engine/scoring";
-import { mockPublishQueue } from "@/lib/publishers/mock";
+import { loadRealMetrics } from "@/lib/integrations/metric-sources";
+import { publishQueue } from "@/lib/publishers/real";
+import { isRealMode } from "@/lib/runtime";
 import { addLog } from "@/lib/state/demo-state";
 import { nowIso, uid } from "@/lib/utils";
 
@@ -23,17 +25,18 @@ export async function runAutopilot(state: CommerceState, mode: AutopilotMode = "
     state.content.unshift(...generatedContent);
   }
 
-  const generatedAssets = generateAssetBatch({ ...state, content: [...generatedContent, ...state.content] }, mode === "dry_run" ? 2 : 5);
+  const generatedAssets = await generateAssetBatchRealAware({ ...state, content: [...generatedContent, ...state.content] }, mode === "dry_run" ? 2 : 5);
   if (mode !== "dry_run") {
     state.assets.unshift(...generatedAssets);
   }
 
-  const publishLogs = mode === "full_autopilot" ? await mockPublishQueue(state) : [];
+  const publishLogs = mode === "full_autopilot" ? await publishQueue(state) : [];
   if (mode === "full_autopilot") {
     state.publishLogs.unshift(...publishLogs);
   }
 
-  const metrics = mode === "full_autopilot" ? createMockMetrics(state) : [];
+  const realMetrics = mode === "full_autopilot" ? await loadRealMetrics() : [];
+  const metrics = mode === "full_autopilot" ? (realMetrics.length ? realMetrics : isRealMode() ? [] : createMockMetrics(state)) : [];
   if (mode === "full_autopilot") {
     state.metrics.unshift(...metrics);
   }

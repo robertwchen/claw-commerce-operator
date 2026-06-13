@@ -15,8 +15,17 @@ export interface StorageAdapter {
 export class LocalStorageAdapter implements StorageAdapter {
   constructor(private rootDir = path.join(process.cwd(), "storage")) {}
 
+  private resolveKey(key: string) {
+    const root = path.resolve(this.rootDir);
+    const filePath = path.resolve(root, key);
+    if (!filePath.startsWith(`${root}${path.sep}`) && filePath !== root) {
+      throw new Error(`Storage key escapes root directory: ${key}`);
+    }
+    return filePath;
+  }
+
   async putObject(object: StorageObject) {
-    const filePath = path.join(this.rootDir, object.key);
+    const filePath = this.resolveKey(object.key);
     await fs.mkdir(path.dirname(filePath), { recursive: true });
     await fs.writeFile(filePath, object.body);
 
@@ -27,7 +36,7 @@ export class LocalStorageAdapter implements StorageAdapter {
   }
 
   async getObject(key: string) {
-    return fs.readFile(path.join(this.rootDir, key));
+    return fs.readFile(this.resolveKey(key));
   }
 }
 

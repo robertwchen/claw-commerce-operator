@@ -38,7 +38,7 @@ export function summarizeAnalytics(state: CommerceState) {
     { impressions: 0, clicks: 0, conversions: 0, revenue: 0, likes: 0, saves: 0 },
   );
 
-  const clickCount = state.clickEvents.length + state.affiliateLinks.reduce((sum, link) => sum + link.clicks, 0);
+  const clickCount = state.clickEvents.length;
   const ctr = totals.impressions ? (totals.clicks + clickCount) / totals.impressions : 0;
   const platforms: Record<ContentPlatform, number> = { pinterest: 0, tiktok: 0, web: 0 };
   const products = new Map<string, number>();

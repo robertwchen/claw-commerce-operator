@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { summarizeAnalytics } from "@/lib/engine/analytics";
 import { recordAffiliateClick } from "@/lib/engine/tracking";
 import { createInitialState } from "@/lib/state/demo-state";
 
@@ -25,5 +26,17 @@ describe("click tracking", () => {
 
     expect(result).toBeUndefined();
     expect(state.logs[0].level).toBe("warn");
+  });
+
+  it("does not double-count tracked clicks in analytics", () => {
+    const state = createInitialState();
+    const link = state.affiliateLinks[0];
+    recordAffiliateClick(state, link.code);
+
+    const analytics = summarizeAnalytics(state);
+
+    expect(link.clicks).toBe(1);
+    expect(state.clickEvents).toHaveLength(1);
+    expect(analytics.trackedClicks).toBe(1);
   });
 });

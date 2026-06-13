@@ -20,16 +20,21 @@ Restart or refresh the OpenClaw session after editing skills so the workspace sk
 
 ## Connect Credentials
 
-Copy `.env.example` to `.env` and fill in only the credentials you have:
+Copy `.env.example` to `.env` and fill in the live inputs you want enabled:
 
+- `OPERATOR_MODE=real` to disable silent demo generation
+- `NEXT_PUBLIC_APP_URL` as a public HTTPS owned domain
+- `PRODUCT_CATALOG_JSON`, `TREND_FEED_JSON`, and `ANALYTICS_IMPORT_JSON` for owned exports
 - `DATABASE_URL` for Postgres
 - `REDIS_URL` for BullMQ/Redis worker mode
-- `OPENAI_API_KEY` or `ANTHROPIC_API_KEY` for future real AI providers
-- `PINTEREST_ACCESS_TOKEN` for Pinterest API mode
+- `OPENAI_API_KEY` or `ANTHROPIC_API_KEY` for real AI copy generation
+- `OPENAI_API_KEY` plus `ASSET_PROVIDER=openai` for real raster asset generation
+- `PINTEREST_ACCESS_TOKEN` and `PINTEREST_BOARD_ID` for Pinterest API mode
 - `TIKTOK_ACCESS_TOKEN` for TikTok Content Posting API mode
-- Amazon Associates/API values when an approved account is available
+- `TIKTOK_PHOTO_URLS` with verified public image URLs for TikTok photo posting
+- Amazon Associates/API values only when an approved account is available
 
-Missing credentials do not block demo mode. The operator uses deterministic mock providers and mock publishers.
+In `OPERATOR_MODE=real`, missing credentials are logged and skipped instead of being faked. Demo fallback is only for local development when real mode is not enabled.
 
 ## Run Manually
 
@@ -48,7 +53,7 @@ npm run autopilot:dry
 npm run autopilot:full
 ```
 
-`dry_run` logs what would happen. `full_autopilot` generates content, assets, mock publishes, imports mock metrics, and marks winners.
+`dry_run` logs what would happen. `full_autopilot` generates content and assets, publishes through configured official APIs, imports real metrics when configured, and marks winners.
 
 ## Run Scheduled Jobs
 
