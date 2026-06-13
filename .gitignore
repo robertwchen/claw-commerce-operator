@@ -1,0 +1,17 @@
+node_modules/
+.next/
+out/
+dist/
+coverage/
+.env
+.env*.local
+!.env.example
+*.log
+prisma/dev.db
+prisma/dev.db-journal
+storage/
+exports/
+tmp/
+.DS_Store
+Thumbs.db
+CLAUDE.md
