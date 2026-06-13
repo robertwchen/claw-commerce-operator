@@ -11,6 +11,7 @@ prisma/dev.db
 prisma/dev.db-journal
 storage/
 exports/
+public/generated-assets/
 tmp/
 .DS_Store
 Thumbs.db

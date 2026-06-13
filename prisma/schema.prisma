@@ -1,0 +1,196 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Product {
+  id                  String          @id @default(cuid())
+  slug                String          @unique
+  title               String
+  brand               String
+  category            String
+  price               Float
+  commissionEstimate  Float
+  productUrl          String
+  affiliateUrl        String
+  imageUrl            String
+  rating              Float
+  reviewCount         Int
+  source              String
+  niche               String
+  trendScore          Float
+  visualScore         Float
+  buyerIntent         Float
+  commissionValue     Float
+  priceValue          Float
+  competitionPenalty  Float
+  opportunityScore    Float
+  status              String
+  createdAt           DateTime        @default(now())
+  updatedAt           DateTime        @updatedAt
+  contentItems        ContentItem[]
+  assets              Asset[]
+  landingPages        LandingPage[]
+  affiliateLinks      AffiliateLink[]
+  metrics             MetricImport[]
+}
+
+model Trend {
+  id             String        @id @default(cuid())
+  slug           String        @unique
+  keyword        String
+  niche          String
+  platform       String
+  velocity       Float
+  confidence     Float
+  exampleHooks   Json
+  matchingSlugs  Json
+  status         String
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  contentItems   ContentItem[]
+}
+
+model ViralAngle {
+  id              String        @id @default(cuid())
+  slug            String        @unique
+  hookType        String
+  visualStyle     String
+  painPoint       String
+  audience        String
+  emotionalAngle  String
+  ctaStyle        String
+  platform        String
+  niche           String
+  productCategory String
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  contentItems    ContentItem[]
+}
+
+model ContentItem {
+  id             String       @id @default(cuid())
+  productId      String
+  product        Product      @relation(fields: [productId], references: [id], onDelete: Cascade)
+  trendId        String?
+  trend          Trend?       @relation(fields: [trendId], references: [id], onDelete: SetNull)
+  angleId        String?
+  angle          ViralAngle?  @relation(fields: [angleId], references: [id], onDelete: SetNull)
+  platform       String
+  type           String
+  title          String
+  body           Json
+  status         String
+  disclosureLine String
+  cta            String
+  scheduledFor   DateTime?
+  publishedAt    DateTime?
+  exportPath     String?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  assets         Asset[]
+  publishLogs    PublishLog[]
+  metrics        MetricImport[]
+}
+
+model Asset {
+  id         String       @id @default(cuid())
+  productId  String
+  product    Product      @relation(fields: [productId], references: [id], onDelete: Cascade)
+  contentId  String?
+  content    ContentItem? @relation(fields: [contentId], references: [id], onDelete: SetNull)
+  type       String
+  title      String
+  url        String
+  spec       Json
+  status     String
+  createdAt  DateTime     @default(now())
+}
+
+model LandingPage {
+  id        String   @id @default(cuid())
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  type      String
+  slug      String   @unique
+  title     String
+  body      Json
+  status    String
+  publicUrl String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model AffiliateLink {
+  id             String       @id @default(cuid())
+  productId      String
+  product        Product      @relation(fields: [productId], references: [id], onDelete: Cascade)
+  code           String       @unique
+  destinationUrl String
+  campaign       String
+  clicks         Int          @default(0)
+  revenueEstimate Float       @default(0)
+  createdAt      DateTime     @default(now())
+  clickEvents    ClickEvent[]
+}
+
+model ClickEvent {
+  id             String        @id @default(cuid())
+  linkId         String
+  link           AffiliateLink @relation(fields: [linkId], references: [id], onDelete: Cascade)
+  productId      String
+  sourcePlatform String
+  campaign       String
+  referrer       String?
+  userAgent      String?
+  createdAt      DateTime      @default(now())
+}
+
+model MetricImport {
+  id          String       @id @default(cuid())
+  contentId   String?
+  content     ContentItem? @relation(fields: [contentId], references: [id], onDelete: SetNull)
+  productId   String?
+  product     Product?     @relation(fields: [productId], references: [id], onDelete: SetNull)
+  platform    String
+  impressions Int
+  saves       Int
+  likes       Int
+  clicks      Int
+  conversions Int
+  revenue     Float
+  importedAt  DateTime     @default(now())
+}
+
+model PublishLog {
+  id           String      @id @default(cuid())
+  contentId    String?
+  content      ContentItem? @relation(fields: [contentId], references: [id], onDelete: SetNull)
+  platform     String
+  status       String
+  message      String
+  payload      Json
+  attemptCount Int         @default(1)
+  createdAt    DateTime    @default(now())
+}
+
+model AutopilotRun {
+  id        String    @id @default(cuid())
+  mode      String
+  status    String
+  summary   Json
+  startedAt DateTime  @default(now())
+  endedAt   DateTime?
+}
+
+model OperatorLog {
+  id        String   @id @default(cuid())
+  level     String
+  scope     String
+  message   String
+  metadata  Json
+  createdAt DateTime @default(now())
+}
