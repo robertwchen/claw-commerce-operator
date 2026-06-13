@@ -1,5 +1,4 @@
 import { Queue, Worker } from "bullmq";
-import IORedis from "ioredis";
 import { runAutopilot } from "@/lib/engine/autopilot";
 import { mutateState } from "@/lib/state/demo-state";
 
@@ -19,7 +18,13 @@ async function main() {
     return;
   }
 
-  const connection = new IORedis(process.env.REDIS_URL, { maxRetriesPerRequest: null });
+  const redisUrl = new URL(process.env.REDIS_URL);
+  const connection = {
+    host: redisUrl.hostname,
+    port: Number(redisUrl.port || 6379),
+    username: redisUrl.username || undefined,
+    password: redisUrl.password || undefined,
+  };
   const queue = new Queue(queueName, { connection });
   await queue.add("autopilot:dry", { mode: "dry_run" });
 

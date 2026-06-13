@@ -80,14 +80,14 @@ export async function generateContentForProduct(state: CommerceState, product: P
   } satisfies ContentItem;
 }
 
-export async function generateContentBatch(state: CommerceState, limit = 6) {
+export async function generateContentBatch(state: CommerceState, limit = 6, allowVariants = false) {
   const topProducts = [...state.products].sort((a, b) => b.opportunityScore - a.opportunityScore).slice(0, limit);
   const existingKeys = new Set(state.content.map((item) => `${item.productId}:${item.platform}`));
   const generated: ContentItem[] = [];
 
   for (const product of topProducts) {
     for (const platform of ["pinterest", "tiktok", "web"] as const) {
-      if (!existingKeys.has(`${product.id}:${platform}`)) {
+      if (allowVariants || !existingKeys.has(`${product.id}:${platform}`)) {
         generated.push(await generateContentForProduct(state, product, platform));
       }
     }
