@@ -1,36 +1,114 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Claw Commerce Operator
 
-## Getting Started
+An OpenClaw-powered affiliate commerce operator for Pinterest, TikTok, and owned landing pages. It finds mock trending products, mines reusable viral angles, scores opportunities, generates original content, creates visual assets, builds landing pages, mock-publishes or exports posts, tracks clicks, imports metrics, and expands winners through autopilot.
 
-First, run the development server:
+Demo mode works without paid credentials.
+
+## Quick Start
+
+```bash
+npm install
+npm run seed
+npm run dev
+```
+
+Open the local dashboard at the URL printed by Next.
+
+## Main Scripts
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm run seed
+npm run worker
+npm run autopilot:dry
+npm run autopilot:full
+npm run scan:products
+npm run scan:trends
+npm run generate:content
+npm run generate:assets
+npm run publish:mock
+npm run analytics:mock
+npm run test
+npm run lint
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Dashboard
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- Overview
+- Products
+- Trends
+- Viral Angles
+- Content Generator
+- Asset Preview
+- Scheduler
+- Landing Pages
+- Analytics
+- Autopilot
+- Settings
+- Logs
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Public Routes
 
-## Learn More
+- `/p/[slug]`
+- `/guides/[slug]`
+- `/compare/[slug]`
+- `/go/[linkId]`
 
-To learn more about Next.js, take a look at the following resources:
+`/go/[linkId]` records click events and redirects to the product affiliate URL.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Architecture
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```mermaid
+flowchart LR
+  A[Mock product sources] --> B[Product Hunter]
+  C[Mock trend sources] --> D[Trend Engine]
+  B --> E[Opportunity Scoring]
+  D --> E
+  F[Viral Angle Miner] --> G[Content Generator]
+  E --> G
+  G --> H[Asset Generator]
+  G --> I[Publisher Adapters]
+  H --> I
+  I --> J[Mock Publish and Exports]
+  G --> K[Landing Pages]
+  K --> L[Click Tracking]
+  J --> M[Analytics]
+  L --> M
+  M --> N[Autopilot Winner Expansion]
+  N --> G
+```
 
-## Deploy on Vercel
+## Data Modes
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Demo JSON state: `storage/demo-state.json`
+- Prisma/Postgres schema: `prisma/schema.prisma`
+- Redis/BullMQ worker: enabled when `REDIS_URL` is set
+- Local storage adapter: `src/lib/storage/adapter.ts`
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## OpenClaw
+
+Workspace files:
+
+- `AGENTS.md`
+- `OPENCLAW_SETUP.md`
+- `skills/claw-commerce/SKILL.md`
+- `openclaw/operator.md`
+- `openclaw/schedules.md`
+
+Run OpenClaw from the repository root so the workspace skill and standing orders are visible.
+
+## Compliance Defaults
+
+- Owned accounts only
+- No fake engagement automation
+- No reposting exact creator content
+- Affiliate disclosure included in posts and landing pages
+- Mock/export fallback when credentials are missing
+
+## Verification
+
+```bash
+npm run lint
+npm run test
+npm run build
+```
